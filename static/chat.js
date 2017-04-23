@@ -1,5 +1,5 @@
 var socket = io();
-
+var notify = false;
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -30,6 +30,7 @@ socket.emit("join", id);
 function send(msg) {
   var doc = document.getElementById("window");
   doc.innerHTML = msg + "<br>" + doc.innerHTML;
+  notifyMe(msg);
 }
 socket.on("post", function(msg) {
   send(msg);
@@ -93,7 +94,7 @@ document.getElementById("chat")
           setCookie("username", id, 365 * 5);
           send("<chatcommand>[COMMAND] Username set to " + id + "</chatcommand>");
         } else if (command[0] == "/help") {
-          send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer<br>/afk: go into or out of AFK mode</chatcommand>");
+          send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer<br>/afk: go into or out of AFK mode<br>/notify [true/false on/off]: turn on or off notifications</chatcommand>");
         } else if (command[0] == "/ping") {
         var d = new Date();
         msping = d.getTime();
@@ -110,7 +111,19 @@ document.getElementById("chat")
           send("<chatcommand>[COMMAND] AFK enabled</chatcommand>");
           socket.emit("afk-on", id);
         }
-      } else {
+      } else if(command[0] == "/notify") {
+        if (command[1] == "on" || command[1] == "true") {
+          notify = true;
+                    send("<chatcommand>[COMMAND] notifications enabled</chatcommand>");
+
+        } else if(command[1] == "off" || command[1] == "false") {
+        notify = false;
+        send("<chatcommand>[COMMAND] notifications disabled</chatcommand>");
+
+        } else {
+
+        }
+    } else {
           send('<chatcommand>[COMMAND] Command "' + command[0] + '" not found</chatcommand>');
         }
         document.getElementById("chat").value = "";
@@ -127,3 +140,14 @@ document.getElementById("chat")
     }
   }
 });
+
+function notifyMe(message) {
+  if (notify == false) {} else {
+  message = message.replace(/<(?:.|\n)*?>/gm, '');
+
+  var options = {
+      body: message
+  }
+  var n = new Notification("BasicChat",options);
+}
+}
