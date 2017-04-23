@@ -1,0 +1,21 @@
+{
+  "name": "basic-chat",
+  "version": "0.1.0",
+  "description": "its a chat",
+  "dependencies": {},
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DatOneLefty/basic-chat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DatOneLefty/basic-chat/issues"
+  },
+  "homepage": "https://github.com/DatOneLefty/basic-chat#readme"
+}
