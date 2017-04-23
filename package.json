@@ -2,7 +2,9 @@
   "name": "basic-chat",
   "version": "0.1.0",
   "description": "its a chat",
-  "dependencies": {},
+  "dependencies": {
+    "node-emoji": "^1.5.1"
+  },
   "main": "index.js",
   "devDependencies": {},
   "scripts": {

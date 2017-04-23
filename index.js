@@ -1,4 +1,5 @@
 var app = require('express')();
+var emoji = require('node-emoji')
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var express = require("express");
@@ -40,6 +41,7 @@ function clean(msg) {
   msg = msg.replace("&#60;b&#62;", "<b>");
   msg = msg.replace("&#60;/b&#62;", "</b>");
   msg += "</b>";
+  msg = emoji.emojify(msg);
   return msg;
 }
 io.on('connection', function(socket){
