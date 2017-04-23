@@ -1,0 +1,41 @@
+* {
+font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid gray;
+}
+
+#chat {
+  width: 100%;
+  color: white;
+  background-color: black;
+  border: 0;
+}
+.window {
+width: 100%;
+height: 100%;
+color: white;
+background-color: black;
+overflow-y: hidden;
+word-wrap: break-word;
+}
+motd {
+color: lightblue;
+}
+server {
+color: red;
+}
+private {
+color: gray;
+}
+chatcommand {
+color: purple;
+}
+body {
+margin: 0;
+padding: 0;
+}
