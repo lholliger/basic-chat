@@ -141,8 +141,24 @@ document.getElementById("chat")
   }
 });
 
+if (Notification.permission !== "denied") {
+Notification.requestPermission(function (permission) {
+  // If the user accepts, let's create a notification
+  if (permission === "granted") {
+    send("<chatcommand>[NOTIFY] notifications permission granted!</chatcommand>");
+  } else {
+    send("<chatcommand>[NOTIFY] notifications rejected. Please enable them</chatcommand>");
+
+  }
+});
+}
+
+
 function notifyMe(message) {
   if (notify == false) {} else {
+
+
+
   message = message.replace(/<(?:.|\n)*?>/gm, '');
 
   var options = {

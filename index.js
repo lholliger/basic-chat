@@ -34,6 +34,7 @@ io.on('connection', function(socket){
 });
 
 function clean(msg) {
+  msg = String(msg);
   msg = msg.replace(/>/g, "&#62;")
   msg = msg.replace(/</g, "&#60;")
   msg = msg.replace("&#60;b&#62;", "<b>");
