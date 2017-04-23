@@ -88,3 +88,7 @@ io.on('connection', function(socket){
     this.emit("ping-return", "");
   });
 });
+
+setInterval(function() {
+  io.emit("online");
+}, 5000);

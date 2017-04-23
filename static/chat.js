@@ -167,3 +167,26 @@ function notifyMe(message) {
   var n = new Notification("BasicChat",options);
 }
 }
+var offline = 0;
+var offmax = 3;
+var offlock = false;
+socket.on("online", function() {
+  if (offline > offmax) {
+    send("<chatcommand>[CONNECT] Connection to server restored</chatcommand>");
+  }
+  offline = 0;
+});
+
+setInterval(function() {
+  offline++;
+  if (offline > offmax) {
+    if (offlock == false) {
+    send("<chatcommand>[CONNECT] Connection lost with server</chatcommand>");
+    offlock = true;
+  }
+} else {
+
+  offlock = false;
+}
+
+}, 2000);
