@@ -6,14 +6,16 @@ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", He
   position: fixed;
   bottom: 0;
   width: 100%;
-  border-top: 1px solid gray;
 }
 
 #chat {
   width: 100%;
   color: white;
-  background-color: black;
-  border: 0;
+  background-color: #2d2d2d;
+  border: 1px solid #2d2d2d;
+  padding: 10px;
+
+
 }
 .window {
 width: 100%;
