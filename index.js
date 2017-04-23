@@ -22,6 +22,7 @@ io.on('connection', function(socket){
 
 io.on('connection', function(socket){
   socket.on('join', function(msg){
+        msg = clean(msg);
     if (msg == "") {
       io.emit("post", "<server>SERVER:</server> an unnamed user connected");
       this.emit("note", "<server>SERVER:</server> To change your username, type in /username (username)");
@@ -32,14 +33,18 @@ io.on('connection', function(socket){
   });
 });
 
+function clean(msg) {
+  msg = msg.replace(/>/g, "&#62;")
+  msg = msg.replace(/</g, "&#60;")
+  msg = msg.replace("&#60;b&#62;", "<b>");
+  msg = msg.replace("&#60;/b&#62;", "</b>");
+  msg += "</b>";
+  return msg;
+}
 io.on('connection', function(socket){
   socket.on('message', function(msg){
 
-    msg = msg.replace(/>/g, "&#62;")
-    msg = msg.replace(/</g, "&#60;")
-    msg = msg.replace("&#60;b&#62;", "<b>");
-    msg = msg.replace("&#60;/b&#62;", "</b>");
-    msg += "</b>";
+    msg = clean(msg);
 
     io.emit("post", msg);
   });
@@ -52,12 +57,27 @@ http.listen(port, function(){
 io.on('connection', function(socket){
   socket.on('change-username', function(msg){
     msg = msg.split(" ");
+        msg = clean(msg);
     console.log("COMMAND: user " + msg[0] + " changed their username to " + msg[1]);
     io.emit("post", "<server>SERVER:</server> user " + msg[0] + " changed their username to " + msg[1]);
 
   });
 });
 
+io.on('connection', function(socket){
+  socket.on('afk-on', function(msg){
+        msg = clean(msg);
+    console.log("COMMAND: afk enabled for " + msg);
+    this.emit("post", "<server>AFK: </server><b>" + msg + "</b> is afk");
+  });
+});
+io.on('connection', function(socket){
+  socket.on('afk-off', function(msg){
+        msg = clean(msg);
+    console.log("COMMAND: afk disabled for " + msg);
+    this.emit("post", "<server>AFK: </server><b>" + msg + "</b> is now not afk");
+  });
+});
 
 io.on('connection', function(socket){
   socket.on('ping-send', function(msg){

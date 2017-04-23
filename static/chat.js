@@ -44,6 +44,21 @@ socket.on("note", function(msg) {
   doc.innerHTML = "<private>[PRIVATE] " + msg + "</private><br>" + doc.innerHTML;
 });
 var msping;
+var afk = false;
+var afktime = 60 * 3;
+var afkcache = 0;
+var stopbd = false;
+setInterval(function() {
+  afkcache++;
+  if (afkcache > afktime) {
+    if (stopbd == true) {} else {
+    socket.emit("afk-on", id);
+    send("<chatcommand>[COMMAND] you are now afk due to inactivity for 3 minutes</chatcommand>");
+
+  }
+    stopbd = true;
+  }
+}, 1000);
 
 socket.on("ping-return", function() {
   var d = new Date();
@@ -55,6 +70,13 @@ document.getElementById("chat")
     .addEventListener("keyup", function(event) {
     event.preventDefault();
     if (event.keyCode == 13) {
+      afkcache = 0;
+      if (afk == true) {
+        afk = false;
+        stopbd = false;
+        send("<chatcommand>[COMMAND] AFK stopped</chatcommand>");
+        socket.emit("afk-off", id);
+      }
       var message = document.getElementById("chat").value;
       if (message.startsWith("/")) {
         var command = message.split(" ");
@@ -71,12 +93,24 @@ document.getElementById("chat")
           setCookie("username", id, 365 * 5);
           send("<chatcommand>[COMMAND] Username set to " + id + "</chatcommand>");
         } else if (command[0] == "/help") {
-          send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer</chatcommand>");
+          send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer<br>/afk: go into or out of AFK mode</chatcommand>");
         } else if (command[0] == "/ping") {
         var d = new Date();
         msping = d.getTime();
         socket.emit("ping-send", "");
+      } else if(command[0] == "/afk") {
+        if (afk == true) {
+          afk = false;
+          stopbd = false;
+          send("<chatcommand>[COMMAND] AFK stopped</chatcommand>");
+          socket.emit("afk-off", id);
         } else {
+          afk = true;
+          stopbd = true;
+          send("<chatcommand>[COMMAND] AFK enabled</chatcommand>");
+          socket.emit("afk-on", id);
+        }
+      } else {
           send('<chatcommand>[COMMAND] Command "' + command[0] + '" not found</chatcommand>');
         }
         document.getElementById("chat").value = "";
