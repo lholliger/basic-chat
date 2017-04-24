@@ -1,5 +1,7 @@
 var socket = io();
 var notify = false;
+
+var rules = "1: dont try to go around the swear filter<br>2: be polite to others<br>3: Dont spam<br>4: Use common sense"; // change this to suit your needs
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -52,6 +54,7 @@ var stopbd = false;
 setInterval(function() {
   afkcache++;
   if (afkcache > afktime) {
+    afk = true;
     if (stopbd == true) {} else {
     socket.emit("afk-on", id);
     send("<chatcommand>[COMMAND] you are now afk due to inactivity for 3 minutes</chatcommand>");
@@ -95,8 +98,10 @@ document.getElementById("chat")
           send("<chatcommand>[COMMAND] Username set to " + id + "</chatcommand>");
         } else if(command[0] == "/online") {
           socket.emit("get-logged-in");
-        }  else if (command[0] == "/help") {
-          send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer<br>/afk: go into or out of AFK mode<br>/notify [true/false on/off]: turn on or off notifications</chatcommand>");
+      } else if(command[0] == "/rules") {
+        send("<chatcommand>[RULES] " + rules + "</chatcommand>");
+      }  else if (command[0] == "/help") {
+          send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer<br>/afk: go into or out of AFK mode<br>/notify [true/false on/off]: turn on or off notifications<br>/online: see how many users are online<br>/rules: see the chat rules</chatcommand>");
         } else if (command[0] == "/ping") {
         var d = new Date();
         msping = d.getTime();
