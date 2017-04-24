@@ -1,8 +1,10 @@
 var app = require('express')();
+var Filter = require('bad-words')
 var emoji = require('node-emoji')
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var express = require("express");
+filter = new Filter();
 var port = 25501; // port for server to run on
 var motd = "<motd>Welcome to BasicChat version 0.1.0<br>To view the list of commands, enter /help in the chat box at the bottom of the page</motd>";      //set this message to what you want to show users every time they log on
 app.get('/', function(req, res){
@@ -43,8 +45,7 @@ function clean(msg) {
   msg += "</b>";
   msg = msg.replace(/[^A-Za-z 0-9 \.,\?""'!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
   msg = msg.substring(0,500);
-
-
+  msg = filter.clean(msg);
   msg = emoji.emojify(msg);
   return msg;
 }
