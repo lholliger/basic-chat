@@ -31,7 +31,9 @@ socket.emit("join", id);
 
 function send(msg) {
   var doc = document.getElementById("window");
-  doc.innerHTML = msg + "<br>" + doc.innerHTML;
+  doc.innerHTML += msg + "<br>";
+  objDiv = document.getElementById("window");
+  objDiv.scrollTop = objDiv.scrollHeight;
   notifyMe(msg);
 }
 socket.on("post", function(msg) {

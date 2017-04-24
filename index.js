@@ -40,9 +40,6 @@ function clean(msg) {
   msg = String(msg);
   msg = msg.replace(/>/g, "&#62;")
   msg = msg.replace(/</g, "&#60;")
-  msg = msg.replace("&#60;b&#62;", "<b>");
-  msg = msg.replace("&#60;/b&#62;", "</b>");
-  msg += "</b>";
   msg = msg.replace(/[^A-Za-z 0-9 \.,\?""'!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
   msg = msg.substring(0,500);
   msg = filter.clean(msg);
@@ -55,8 +52,12 @@ io.on('connection', function(socket){
           if (msg.length >= 2) {
             msg = "<b>" + clean(msg[0]) + ": </b>" + clean(msg[1]);
             io.emit("post", msg);
+  } else {
+    this.emit("note", "<server>SERVER:</server> message not sent properly, clear browser cache?");
   }
 
+} else {
+  this.emit("note", "<server>SERVER:</server> message is not array, clear browser cache?");
 }
   });
 });
@@ -93,14 +94,14 @@ io.on('connection', function(socket){
   socket.on('afk-on', function(msg){
         msg = clean(msg);
     console.log("COMMAND: afk enabled for " + msg);
-    this.emit("post", "<server>AFK: </server><b>" + msg + "</b> is afk");
+    io.emit("post", "<server>AFK: </server><b>" + msg + "</b> is afk");
   });
 });
 io.on('connection', function(socket){
   socket.on('afk-off', function(msg){
         msg = clean(msg);
     console.log("COMMAND: afk disabled for " + msg);
-    this.emit("post", "<server>AFK: </server><b>" + msg + "</b> is now not afk");
+    io.emit("post", "<server>AFK: </server><b>" + msg + "</b> is now not afk");
   });
 });
 

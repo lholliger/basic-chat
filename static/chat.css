@@ -3,7 +3,6 @@ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", He
 }
 
 .footer {
-  position: fixed;
   bottom: 0;
   width: 100%;
 }
@@ -18,11 +17,12 @@ font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", He
 
 }
 .window {
-width: 100%;
 height: 100%;
 color: white;
 background-color: black;
 word-wrap: break-word;
+overflow: auto;
+
 }
 motd {
 color: lightblue;
@@ -40,4 +40,11 @@ body {
 margin: 0;
 padding: 0;
 background-color: black;
+
+
+height: calc(100% - 35px);
+height: -moz-calc(100% - 35px);
+height: -webkit-calc(100% - 18px);
+height: -o-calc(100% - 35px);
+height: calc(100% - 35px);
 }
