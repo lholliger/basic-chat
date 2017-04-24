@@ -41,8 +41,8 @@ function clean(msg) {
   msg = msg.replace("&#60;b&#62;", "<b>");
   msg = msg.replace("&#60;/b&#62;", "</b>");
   msg += "</b>";
-  msg = msg.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '') ;
-
+  msg = msg.replace(/[^A-Za-z 0-9 \.,\?""'!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '') ;
+  msg = msg.substring(0,500);
   msg = emoji.emojify(msg);
   return msg;
 }
@@ -61,11 +61,17 @@ http.listen(port, function(){
 
 io.on('connection', function(socket){
   socket.on('change-username', function(msg){
+    if (typeof msg == "string") {
+      msg = msg + " ";
     msg = msg.split(" ");
+
         msg = [clean(msg[0]),clean(msg[1])];
     console.log("COMMAND: user " + msg[0] + " changed their username to " + msg[1]);
     io.emit("post", "<server>SERVER:</server> user " + msg[0] + " changed their username to " + msg[1]);
+} else {
+  this.emit("note", "<server>SERVER:</server> trying to crash my server...hmmmm?");
 
+}
   });
 });
 
