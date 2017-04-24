@@ -41,6 +41,8 @@ function clean(msg) {
   msg = msg.replace("&#60;b&#62;", "<b>");
   msg = msg.replace("&#60;/b&#62;", "</b>");
   msg += "</b>";
+  msg = msg.replace(/[^A-Za-z 0-9 \.,\?""!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '') ;
+
   msg = emoji.emojify(msg);
   return msg;
 }
