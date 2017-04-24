@@ -15,7 +15,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Methods", "PUT, GET, POST, DELETE, OPTIONS");
     next();
 });
-
+var onlinep = 0;
 app.use('/external/', express.static(__dirname + "/static/"));
 io.on('connection', function(socket){
 
@@ -41,8 +41,10 @@ function clean(msg) {
   msg = msg.replace("&#60;b&#62;", "<b>");
   msg = msg.replace("&#60;/b&#62;", "</b>");
   msg += "</b>";
-  msg = msg.replace(/[^A-Za-z 0-9 \.,\?""'!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '') ;
+  msg = msg.replace(/[^A-Za-z 0-9 \.,\?""'!@#\$%\^&\*\(\)-_=\+;:<>\/\\\|\}\{\[\]`~]*/g, '');
   msg = msg.substring(0,500);
+
+
   msg = emoji.emojify(msg);
   return msg;
 }
@@ -59,7 +61,15 @@ http.listen(port, function(){
   console.log('Server started. listening on port ' + port);
 });
 
+io.on('connect', function () {
+onlinep++;
+});
+
 io.on('connection', function(socket){
+  socket.on('disconnect', function () {
+onlinep--;
+  });
+
   socket.on('change-username', function(msg){
     if (typeof msg == "string") {
       msg = msg + " ";
@@ -89,6 +99,13 @@ io.on('connection', function(socket){
     this.emit("post", "<server>AFK: </server><b>" + msg + "</b> is now not afk");
   });
 });
+
+io.on('connection', function(socket){
+  socket.on('get-logged-in', function(msg){
+        this.emit("current", onlinep);
+  });
+});
+
 
 io.on('connection', function(socket){
   socket.on('ping-send', function(msg){

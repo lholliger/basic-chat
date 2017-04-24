@@ -93,7 +93,9 @@ document.getElementById("chat")
           id = command[1];
           setCookie("username", id, 365 * 5);
           send("<chatcommand>[COMMAND] Username set to " + id + "</chatcommand>");
-        } else if (command[0] == "/help") {
+        } else if(command[0] == "/online") {
+          socket.emit("get-logged-in");
+        }  else if (command[0] == "/help") {
           send("<chatcommand>[COMMAND]<br>Commands:<br>/help: show list of commands<br>/username [username]: set username<br>/ping: get time for a message to go to a server and back from your computer<br>/afk: go into or out of AFK mode<br>/notify [true/false on/off]: turn on or off notifications</chatcommand>");
         } else if (command[0] == "/ping") {
         var d = new Date();
@@ -175,6 +177,11 @@ socket.on("online", function() {
     send("<chatcommand>[CONNECT] Connection to server restored</chatcommand>");
   }
   offline = 0;
+});
+
+socket.on("current", function(msg) {
+  send("<chatcommand>[ONLINE] There are currently " + msg +" online</chatcommand>");
+
 });
 
 setInterval(function() {
