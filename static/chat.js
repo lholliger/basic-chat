@@ -135,13 +135,12 @@ document.getElementById("chat")
         }
         document.getElementById("chat").value = "";
 
-
       } else {
       if (id == "") {
-        socket.emit("message", "<b>Unnamed</b>: " + message);
+        socket.emit("message", ["Unnamed", message]);
 
       } else {
-        socket.emit("message", "<b>" + id + "</b>: " + message);
+        socket.emit("message", [id,message]);
       }
         document.getElementById("chat").value = "";
     }

@@ -51,10 +51,13 @@ function clean(msg) {
 }
 io.on('connection', function(socket){
   socket.on('message', function(msg){
+        if (typeof msg == "object") {
+          if (msg.length >= 2) {
+            msg = "<b>" + clean(msg[0]) + ": </b>" + clean(msg[1]);
+            io.emit("post", msg);
+  }
 
-    msg = clean(msg);
-
-    io.emit("post", msg);
+}
   });
 });
 
