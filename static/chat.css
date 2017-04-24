@@ -22,7 +22,15 @@ color: white;
 background-color: black;
 word-wrap: break-word;
 overflow: auto;
+margin-bottom: 10px;
 
+
+
+height: calc(100% - 10px);
+height: -moz-calc(100% - 10px);
+height: -webkit-calc(100% - 10px);
+height: -o-calc(100% - 10px);
+height: calc(100% - 10px);
 }
 motd {
 color: lightblue;

@@ -93,15 +93,25 @@ onlinep--;
 io.on('connection', function(socket){
   socket.on('afk-on', function(msg){
         msg = clean(msg);
+        if (msg == "") {
+          console.log("COMMAND: afk enabled for an unnamed user");
+          io.emit("post", "<server>AFK: </server>an unnamed user is afk");
+        } else {
     console.log("COMMAND: afk enabled for " + msg);
     io.emit("post", "<server>AFK: </server><b>" + msg + "</b> is afk");
+  }
   });
 });
 io.on('connection', function(socket){
   socket.on('afk-off', function(msg){
         msg = clean(msg);
+                if (msg == "") {
+                  console.log("COMMAND: afk disabled for an unnamed user";
+                  io.emit("post", "<server>AFK: </server><b>" + msg + "</b> is now not afk");
+                } else {
     console.log("COMMAND: afk disabled for " + msg);
-    io.emit("post", "<server>AFK: </server><b>" + msg + "</b> is now not afk");
+    io.emit("post", "<server>AFK: </server>an unnamed user is now not afk");
+  }
   });
 });
 

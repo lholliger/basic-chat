@@ -31,7 +31,11 @@ socket.emit("join", id);
 
 function send(msg) {
   var doc = document.getElementById("window");
-  doc.innerHTML += msg + "<br>";
+
+  var d = new Date();
+  var hours = ('0' + d.getHours()).slice(-2)
+  var minutes = ('0' + d.getMinutes()).slice(-2)
+  doc.innerHTML += "<b>" + hours + ":" + minutes + "</b> " + msg + "<br>";
   objDiv = document.getElementById("window");
   objDiv.scrollTop = objDiv.scrollHeight;
   notifyMe(msg);
