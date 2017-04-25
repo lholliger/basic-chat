@@ -56,7 +56,7 @@ io.on('connection', function(socket){
           if (msg.length == 3) {
             if (user_ver.indexOf(msg[2]) != -1) {
               if (unam_ver[user_ver.indexOf(msg[2])] == msg[0]) {
-              app = "√ ";
+              app = "<font color='purple'>√</font> ";
             } else {
               app = "";
             }
