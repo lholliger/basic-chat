@@ -143,10 +143,10 @@ document.getElementById("chat")
 
       } else {
       if (id == "") {
-        socket.emit("message", ["Unnamed", message]);
+        socket.emit("message", ["Unnamed", message, cuid]);
 
       } else {
-        socket.emit("message", [id,message]);
+        socket.emit("message", [id,message, cuid]);
       }
         document.getElementById("chat").value = "";
     }
@@ -207,3 +207,13 @@ setInterval(function() {
 }
 
 }, 2000);
+
+var cuid;
+if (getCookie("acc_ver") == "") {
+  d = new Date();
+  setCookie("acc_ver", d.getTime(), 365 * 5);
+  console.log("UUID set to " + getCookie("acc_ver"));
+  cuid = getCookie("acc_ver");
+} else {
+  cuid = getCookie("acc_ver");
+}

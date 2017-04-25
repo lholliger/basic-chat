@@ -4,6 +4,7 @@ var emoji = require('node-emoji')
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var express = require("express");
+var fs = require('fs');
 filter = new Filter();
 var port = 25501; // port for server to run on
 var motd = "<motd>Welcome to BasicChat version 0.1.0<br>To view the list of commands, enter /help in the chat box at the bottom of the page</motd>";      //set this message to what you want to show users every time they log on
@@ -46,11 +47,23 @@ function clean(msg) {
   msg = emoji.emojify(msg);
   return msg;
 }
+
+var user_ver = JSON.parse(fs.readFileSync(__dirname + '/data/ids', 'utf8'));
+var unam_ver = JSON.parse(fs.readFileSync(__dirname + '/data/uss', 'utf8'));
 io.on('connection', function(socket){
   socket.on('message', function(msg){
         if (typeof msg == "object") {
-          if (msg.length >= 2) {
-            msg = "<b>" + clean(msg[0]) + ": </b>" + clean(msg[1]);
+          if (msg.length == 3) {
+            if (user_ver.indexOf(msg[2]) != -1) {
+              if (unam_ver[user_ver.indexOf(msg[2])] == msg[0]) {
+              app = "√ ";
+            } else {
+              app = "";
+            }
+            } else {
+              app = "";
+            }
+            msg = "<b>" + app  + clean(msg[0]) + ": </b>" + clean(msg[1]);
             io.emit("post", msg);
   } else {
     this.emit("note", "<server>SERVER:</server> message not sent properly, clear browser cache?");
