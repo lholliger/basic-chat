@@ -7,7 +7,7 @@ var express = require("express");
 var fs = require('fs');
 filter = new Filter();
 var port = 25501; // port for server to run on
-var motd = "<motd>Welcome to BasicChat version 0.1.0<br>To view the list of commands, enter /help in the chat box at the bottom of the page</motd>";      //set this message to what you want to show users every time they log on
+var motd = "<motd>Welcome to BasicChat version 0.1.0<br>To view the list of commands, enter /help in the chat box at the bottom of the page<br>There is currently " + onlinep +"people online</motd>";      //set this message to what you want to show users every time they log on
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/static/index.html');
 });

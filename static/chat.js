@@ -133,7 +133,14 @@ document.getElementById("chat")
         notify = false;
         send("<chatcommand>[COMMAND] notifications disabled</chatcommand>");
 
-        } else {
+      } else if (command[1] == "status") {
+        if (notify == true) {
+        send("<chatcommand>[COMMAND] Status: notifications are enabled, currently, access to notifications is " + Notification.permission +"</chatcommand>");
+      }
+      if (notify == false) {
+      send("<chatcommand>[COMMAND] Status: notifications are not enabled, currently, access to notifications is " + Notification.permission +"</chatcommand>");
+    }
+      } else {
 
         }
     } else {
@@ -176,7 +183,9 @@ function notifyMe(message) {
   var options = {
       body: message
   }
+  if (document.hasFocus() == false) {
   var n = new Notification("BasicChat",options);
+}
 }
 }
 var offline = 0;
