@@ -7,7 +7,7 @@ var express = require("express");
 var fs = require('fs');
 filter = new Filter();
 var port = 25501; // port for server to run on
-var motd = "<motd>Welcome to BasicChat version 0.1.0<br>To view the list of commands, enter /help in the chat box at the bottom of the page<br>There is currently " + onlinep +"people online</motd>";      //set this message to what you want to show users every time they log on
+var motd = "";
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/static/index.html');
 });
@@ -33,6 +33,7 @@ io.on('connection', function(socket){
     } else {
     io.emit("post", "<server>SERVER: </server>" + msg + " joined the server");
   }
+  motd = "<motd>Welcome to BasicChat version 0.1.0<br>To view the list of commands, enter /help in the chat box at the bottom of the page<br>There is currently " + onlinep + " online</motd>";      //set this message to what you want to show users every time they log on
   this.emit("motd", motd);
   });
 });
