@@ -95,12 +95,12 @@ io.on('connection', function(socket){
             } else {
               app = "";
             }
-            if (msg[0] == itadmin) {
-              msg = "<b><font color='green'>" + app  + clean(msg[0]) + ":</font> </b>" + clean(msg[1]);
+            msg[0] = clean(msg[0]);
+            if (msg[2] == itadmin.replace(/\n|\r/g, "")) {
+              msg[0] = "<font color='cyan'>" + msg[0] + "</font>";
+            }
 
-            } else {
-            msg = "<b>" + app  + clean(msg[0]) + ": </b>" + clean(msg[1]);
-                      }
+            msg = "<b>" + app  + msg[0] + ": </b>" + clean(msg[1]);
             io.emit("post", msg);
           } else {
             this.emit("note", "<server>SERVER:</server> you cannot send empty messages");
@@ -163,6 +163,9 @@ io.on('connection', function(socket){
               } else {
                 app = "";
               }
+              if (msg[1] == itadmin.replace(/\n|\r/g, "")) {
+                username = "<font color='cyan'>" + username + "</font>";
+              }
               console.log("COMMAND: afk enabled for " + msg);
               io.emit("post", "<server>AFK: </server><b>" + app + username + "</b> is afk");
           } else {
@@ -197,6 +200,10 @@ io.on('connection', function(socket){
                       }
                       } else {
                         app = "";
+                      }
+
+                      if (msg[1] == itadmin.replace(/\n|\r/g, "")) {
+                        username = "<font color='cyan'>" + username + "</font>";
                       }
                       console.log("COMMAND: afk disabled for " + username);
                       io.emit("post", "<server>AFK: </server><b>" + app + username + "</b> is now not afk");
