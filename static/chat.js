@@ -1,6 +1,16 @@
 var socket = io();
 var notify = false;
 
+var cuid;
+if (getCookie("acc_ver") == "") {
+  d = new Date();
+  setCookie("acc_ver", d.getTime(), 365 * 5);
+  console.log("UUID set to " + getCookie("acc_ver"));
+  cuid = getCookie("acc_ver");
+} else {
+  cuid = getCookie("acc_ver");
+}
+
 var rules = "1: dont try to go around the swear filter<br>2: be polite to others<br>3: Dont spam<br>4: Use common sense"; // change this to suit your needs
 function setCookie(cname, cvalue, exdays) {
     var d = new Date();
@@ -27,7 +37,7 @@ function getCookie(cname) {
 }
 
 var id = getCookie("username");
-socket.emit("join", id);
+socket.emit("join", [id, cuid]);
 
 function send(msg) {
   var doc = document.getElementById("window");
@@ -49,8 +59,16 @@ socket.on("motd", function(msg) {
 });
 
 socket.on("note", function(msg) {
+
   var doc = document.getElementById("window");
-  doc.innerHTML = "<private>[PRIVATE] " + msg + "</private><br>" + doc.innerHTML;
+
+  var d = new Date();
+  var hours = ('0' + d.getHours()).slice(-2)
+  var minutes = ('0' + d.getMinutes()).slice(-2)
+  doc.innerHTML += "<b>" + hours + ":" + minutes + "</b> <private>[PRIVATE] " + msg  + "</private><br>";
+  objDiv = document.getElementById("window");
+  objDiv.scrollTop = objDiv.scrollHeight;
+  notifyMe(msg);
 });
 var msping;
 var afk = false;
@@ -62,7 +80,7 @@ setInterval(function() {
   if (afkcache > afktime) {
     afk = true;
     if (stopbd == true) {} else {
-    socket.emit("afk-on", id);
+    socket.emit("afk-on", [id, cuid]);
     send("<chatcommand>[COMMAND] you are now afk due to inactivity for 3 minutes</chatcommand>");
 
   }
@@ -85,14 +103,15 @@ document.getElementById("chat")
         afk = false;
         stopbd = false;
         send("<chatcommand>[COMMAND] AFK stopped</chatcommand>");
-        socket.emit("afk-off", id);
+        socket.emit("afk-off", [id, cuid]);
       }
       var message = document.getElementById("chat").value;
       if (message.startsWith("/")) {
         var command = message.split(" ");
 
-
-        if (command[0] == "/username") {
+        if (command[0] == "/server") {
+          socket.emit("adm-command", [cuid, command]);
+        } else if (command[0] == "/username") {
           if (id == "") {
             socket.emit("change-username", "Unnamed" + " " + command[1]);
 
@@ -117,12 +136,12 @@ document.getElementById("chat")
           afk = false;
           stopbd = false;
           send("<chatcommand>[COMMAND] AFK stopped</chatcommand>");
-          socket.emit("afk-off", id);
+          socket.emit("afk-off", [id, cuid]);
         } else {
           afk = true;
           stopbd = true;
           send("<chatcommand>[COMMAND] AFK enabled</chatcommand>");
-          socket.emit("afk-on", id);
+          socket.emit("afk-on", [id, cuid]);
         }
       } else if(command[0] == "/notify") {
         if (command[1] == "on" || command[1] == "true") {
@@ -216,13 +235,3 @@ setInterval(function() {
 }
 
 }, 2000);
-
-var cuid;
-if (getCookie("acc_ver") == "") {
-  d = new Date();
-  setCookie("acc_ver", d.getTime(), 365 * 5);
-  console.log("UUID set to " + getCookie("acc_ver"));
-  cuid = getCookie("acc_ver");
-} else {
-  cuid = getCookie("acc_ver");
-}
