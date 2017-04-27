@@ -77,7 +77,20 @@ function clean(msg) {
   return msg;
 }
 
-
+function addFormatting(item) {
+  item = item.split(" ");
+  var i = 0;
+  item.forEach(function(ite) {
+    if (ite.startsWith("https://")) {
+      item[i] = "<a href='" + ite + 'target="_blank' + "'>" + ite + "</a>";
+    }
+    if (ite.startsWith("http://")) {
+      item[i] = "<a href='" + ite  + 'target="_blank' +  "'>" + ite + "</a>";
+    }
+    i++;
+  });
+  return item.join(" ");
+}
 
 
 
@@ -95,12 +108,15 @@ io.on('connection', function(socket){
             } else {
               app = "";
             }
-            msg[0] = clean(msg[0]);
+
             if (msg[2] == itadmin.replace(/\n|\r/g, "")) {
               msg[0] = "<font color='cyan'>" + msg[0] + "</font>";
             }
 
-            msg = "<b>" + app  + msg[0] + ": </b>" + clean(msg[1]);
+            if (msg[2] == "BasicBot") {
+              msg[0] = "<font color='#f27e1f'>" + msg[0] + "</font>";
+            }
+            msg = "<b>" + app  + msg[0] + ": </b>" + addFormatting(clean(msg[1]));
             io.emit("post", msg);
           } else {
             this.emit("note", "<server>SERVER:</server> you cannot send empty messages");

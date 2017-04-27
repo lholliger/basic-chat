@@ -56,3 +56,7 @@ height: -webkit-calc(100% - 18px);
 height: -o-calc(100% - 35px);
 height: calc(100% - 35px);
 }
+
+a {
+  color: lightgray;
+}
