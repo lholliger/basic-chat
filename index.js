@@ -96,40 +96,42 @@ function addFormatting(item) {
 
 io.on('connection', function(socket){
   socket.on('message', function(msg){
-        if (typeof msg == "object") {
-          if (msg.length == 3) {
-            if (msg[2] != "") {
-            if (user_ver.indexOf(msg[2]) != -1) {
-              if (unam_ver[user_ver.indexOf(msg[2])] == msg[0]) {
-              app = "<font color='#1DCAFF'>√</font> ";
+    if (msg != "") {
+          if (typeof msg == "object") {
+            if (msg.length == 3) {
+              if (msg[2] != "") {
+              if (user_ver.indexOf(msg[2]) != -1) {
+                if (unam_ver[user_ver.indexOf(msg[2])] == msg[0]) {
+                app = "<font color='#1DCAFF'>√</font> ";
+              } else {
+                app = "";
+              }
+              } else {
+                app = "";
+              }
+
+              if (msg[2] == itadmin.replace(/\n|\r/g, "")) {
+                msg[0] = "<font color='cyan'>" + msg[0] + "</font>";
+              }
+
+              if (msg[2] == "BasicBot") {
+                msg[0] = "<font color='#f27e1f'>" + msg[0] + "</font>";
+              }
+              msg = "<b>" + app  + msg[0] + ": </b>" + addFormatting(clean(msg[1]));
+              io.emit("post", msg);
             } else {
-              app = "";
-            }
-            } else {
-              app = "";
-            }
+              this.emit("note", "<server>SERVER:</server> you cannot send empty messages");
 
-            if (msg[2] == itadmin.replace(/\n|\r/g, "")) {
-              msg[0] = "<font color='cyan'>" + msg[0] + "</font>";
             }
+    } else {
+      this.emit("note", "<server>SERVER:</server> message not sent properly, clear browser cache?");
+    }
 
-            if (msg[2] == "BasicBot") {
-              msg[0] = "<font color='#f27e1f'>" + msg[0] + "</font>";
-            }
-            msg = "<b>" + app  + msg[0] + ": </b>" + addFormatting(clean(msg[1]));
-            io.emit("post", msg);
-          } else {
-            this.emit("note", "<server>SERVER:</server> you cannot send empty messages");
-
-          }
-  } else {
-    this.emit("note", "<server>SERVER:</server> message not sent properly, clear browser cache?");
+    } else {
+      this.emit("note", "<server>SERVER:</server> message is not array, clear browser cache?");
+    }
+    });
   }
-
-} else {
-  this.emit("note", "<server>SERVER:</server> message is not array, clear browser cache?");
-}
-  });
 });
 
 http.listen(port, function(){
