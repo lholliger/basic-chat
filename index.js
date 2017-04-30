@@ -8,7 +8,7 @@ var fs = require('fs');
 filter = new Filter();
 var port = 25501; // port for server to run on
 var motd = "";
-
+var usid = [];
 var user_ver = JSON.parse(fs.readFileSync(__dirname + '/data/ids', 'utf8'));
 var unam_ver = JSON.parse(fs.readFileSync(__dirname + '/data/uss', 'utf8'));
 var itadmin = fs.readFileSync(__dirname + '/data/admin', 'utf8');
@@ -38,8 +38,9 @@ io.on('connection', function(socket){
     if (msg[0] == "") {
       io.emit("post", "<server>SERVER:</server> an unnamed user connected");
       this.emit("note", "<server>SERVER:</server> To change your username, type in /username (username)");
+      usid = usid.concat([[socket.id, "", msg[1]]]);
     } else {
-
+      usid = usid.concat([[socket.id, username, msg[1]]]);
       var app;
       if (user_ver.indexOf(msg[1]) != -1) {
         if (unam_ver[user_ver.indexOf(msg[1])] == msg[0]) {
@@ -48,7 +49,7 @@ io.on('connection', function(socket){
         app = "";
       }
       } else {
-        app = "NI";
+        app = "";
       }
 
     io.emit("post", "<server>SERVER: </server>" + app + username + " joined the server");
@@ -143,6 +144,23 @@ onlinep++;
 io.on('connection', function(socket){
   socket.on('disconnect', function () {
 onlinep--;
+
+  usid.forEach(function(ite) {
+    if (ite[0] == socket.id) {
+      if (user_ver.indexOf(ite[2]) != -1) {
+        if (unam_ver[user_ver.indexOf(ite[2])] == ite[1]) {
+        app = "<font color='#1DCAFF'>√</font> ";
+      } else {
+        app = "";
+      }
+      } else {
+        app = "";
+      }
+
+      io.emit("post", "<server>SERVER: </server>" + app + ite[1] + " left the server");
+
+    }
+  });
   });
 
   socket.on('change-username', function(msg){
