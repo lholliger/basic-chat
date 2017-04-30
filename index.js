@@ -99,7 +99,7 @@ io.on('connection', function(socket){
   socket.on('message', function(msg){
         if (typeof msg == "object") {
           if (msg.length == 3) {
-            if (msg[2] != "") {
+            if (msg[1] != "") {
             if (user_ver.indexOf(msg[2]) != -1) {
               if (unam_ver[user_ver.indexOf(msg[2])] == msg[0]) {
               app = "<font color='#1DCAFF'>√</font> ";
@@ -167,10 +167,14 @@ onlinep--;
     if (typeof msg == "string") {
       msg = msg + " ";
     msg = msg.split(" ");
-
+    if (msg[1].length > 4 && msg[1].length < 15) {
         msg = [clean(msg[0]),clean(msg[1])];
     console.log("COMMAND: user " + msg[0] + " changed their username to " + msg[1]);
     io.emit("post", "<server>SERVER:</server> user " + msg[0] + " changed their username to " + msg[1]);
+  } else {
+    this.emit("note", "<server>SERVER:</server> your username has to be > 4 and < 15 characters");
+
+  }
 } else {
   this.emit("note", "<server>SERVER:</server> trying to crash my server...hmmmm?");
 

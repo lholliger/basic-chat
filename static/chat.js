@@ -40,9 +40,7 @@ var id = getCookie("username");
 socket.emit("join", [id, cuid]);
 
 function send(msg) {
-  if (msg != "") {
     var doc = document.getElementById("window");
-
     var d = new Date();
     var hours = ('0' + d.getHours()).slice(-2)
     var minutes = ('0' + d.getMinutes()).slice(-2)
@@ -50,7 +48,6 @@ function send(msg) {
     objDiv = document.getElementById("window");
     objDiv.scrollTop = objDiv.scrollHeight;
     notifyMe(msg);
-  }
 }
 socket.on("post", function(msg) {
   send(msg);
@@ -114,6 +111,9 @@ document.getElementById("chat")
         if (command[0] == "/server") {
           socket.emit("adm-command", [cuid, command]);
         } else if (command[0] == "/username") {
+          if (command[1].length > 4 && command[1].length < 15) {
+
+
           if (id == "") {
             socket.emit("change-username", "Unnamed" + " " + command[1]);
 
@@ -123,6 +123,9 @@ document.getElementById("chat")
           id = command[1];
           setCookie("username", id, 365 * 5);
           send("<chatcommand>[COMMAND] Username set to " + id + "</chatcommand>");
+        } else {
+          send("<server>ERROR:</server> Username must be greater than 4 characters and less than 15");
+        }
         } else if(command[0] == "/online") {
           socket.emit("get-logged-in");
       } else if(command[0] == "/rules") {
@@ -170,12 +173,14 @@ document.getElementById("chat")
         document.getElementById("chat").value = "";
 
       } else {
+        if (message != "") {
       if (id == "") {
         socket.emit("message", ["Unnamed", message, cuid]);
 
       } else {
         socket.emit("message", [id,message, cuid]);
       }
+    }
         document.getElementById("chat").value = "";
     }
   }
