@@ -110,7 +110,9 @@ io.on('connection', function(socket){
               app = "";
             }
 
-            if (msg[2] == itadmin.replace(/\n|\r/g, "")) {
+            msg[0] = clean(msg[0]);
+              if (msg[2] == itadmin.replace(/\n|\r/g, "")) {
+             
               msg[0] = "<font color='cyan'>" + msg[0] + "</font>";
             }
 
